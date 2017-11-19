@@ -1,0 +1,15 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {"node": "current"}
+      }
+    ]
+  ],
+  "plugins": [
+    "transform-flow-strip-types",
+    "transform-async-to-generator",
+    "transform-async-generator-functions"
+  ],
+}

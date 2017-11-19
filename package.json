@@ -1,0 +1,19 @@
+{
+  "name": "chunq",
+  "version": "0.1.0",
+  "license": "MIT",
+  "scripts": {
+    "test": "babel-node ./node_modules/.bin/_mocha"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "flow-bin": "^0.59.0",
+    "mocha": "^4.0.1"
+  },
+  "dependencies": {
+    "babel-plugin-transform-async-generator-functions": "^6.24.1",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-env": "^1.6.1"
+  }
+}
