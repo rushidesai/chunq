@@ -1,19 +1,36 @@
 {
   "name": "chunq",
-  "version": "0.1.0",
+  "version": "0.2.4",
+  "description": "Higher-order functions over AsyncIterables of Arrays",
   "license": "MIT",
+  "main": "dist/index.js",
+  "homepage": "https://github.com/rushidesai/chunq",
+  "bugs": {
+    "url": "https://github.com/rushidesai/chunq/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/rushidesai/chunq.git"
+  },
   "scripts": {
-    "test": "babel-node ./node_modules/.bin/_mocha"
+    "test": "npm run lint && npm run testonly && npm run check",
+    "testonly": "babel-node ./node_modules/.bin/_mocha",
+    "lint": "eslint --rulesdir ./resources/lint src || (printf '\\033[33mTry: \\033[7m npm run lint -- --fix \\033[0m\\n' && exit 1)",
+    "check": "flow check",
+    "build": "babel src --optional runtime --out-dir dist/ && npm run build-dot-flow",
+    "build-dot-flow": "find ./src -name '*.js' | while read filepath; do cp $filepath `echo $filepath | sed 's/\\/src\\//\\/dist\\//g'`.flow; done",
+    "prepublish": "npm build"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "flow-bin": "^0.59.0",
-    "mocha": "^4.0.1"
-  },
-  "dependencies": {
     "babel-plugin-transform-async-generator-functions": "^6.24.1",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-preset-env": "^1.6.1"
+    "babel-preset-env": "^1.6.1",
+    "eslint": "4.4.1",
+    "eslint-plugin-babel": "4.1.2",
+    "eslint-plugin-flowtype": "2.35.0",
+    "flow-bin": "^0.59.0",
+    "mocha": "^4.0.1"
   }
 }

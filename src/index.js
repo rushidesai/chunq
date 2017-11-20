@@ -1,4 +1,4 @@
-//@flow
+// @flow
 
 class Iterable<T> implements AsyncIterable<Array<T>> {
   async [Symbol.asyncIterator](): AsyncIterator<Array<T>> {
@@ -16,13 +16,9 @@ class Iterable<T> implements AsyncIterable<Array<T>> {
   async collectChunks(): Promise<Array<Array<T>>> {
     let ret = [];
     for await (const chunk of this) {
-      ret = ret.concat([chunk]);
+      ret = ret.concat([ chunk ]);
     }
     return ret;
-  }
-
-  static from(...chunks: Array<Array<T>>): Iterable<T> {
-    return new StaticIterable(...chunks);
   }
 
   filter(predicate: T=>bool): Iterable<T> {
@@ -34,13 +30,13 @@ class Iterable<T> implements AsyncIterable<Array<T>> {
   }
 
   orderBy(
-    ...fieldGetters: Array<(T=>any)|[T=>any,boolean]>
+    ...fieldGetters: Array<(T=>any) | [T=>any,boolean]>
   ): Iterable<T> {
     return new OrderedIterable(this, fieldGetters);
   }
 
   concat(...rest: Array<Iterable<T>>): Iterable<T> {
-    return new ConcatenatedIterable(...[this].concat(...rest));
+    return new ConcatenatedIterable(...[ this ].concat(...rest));
   }
 }
 
@@ -52,7 +48,7 @@ class AppliedIterable<Tin, Tout> extends Iterable<Tout> {
     this.source = source;
   }
 
-  apply(chunk: Array<Tin>): Array<Tout> {
+  apply(_chunk: Array<Tin>): Array<Tout> {
     throw new Error('Abstract method');
   }
 
@@ -96,13 +92,12 @@ class MappedIterable<Tin, Tout>
 
 class OrderedIterable<T> extends Iterable<T> {
   source: Iterable<T>;
-  fieldGetters: Array<T=>any|[T=>any|boolean]>;
+  fieldGetters: Array<T=>any | [T=>any, boolean]>;
   directions: Map<number, bool>;
 
   constructor(
     source: Iterable<T>,
-    fieldGetters: Array<(T=>any)|[T=>any,boolean]>,
-    directions: ?Array<bool>,
+    fieldGetters: Array<(T=>any) | [T=>any, boolean]>,
   ) {
     super();
     this.source = source;
@@ -121,7 +116,7 @@ class OrderedIterable<T> extends Iterable<T> {
 
   async * [Symbol.asyncIterator](): AsyncIterator<Array<T>> {
     const chunk = await this.source.collect();
-    let mapped = chunk.map((item, i) => {
+    const mapped = chunk.map((item, i) => {
       return {index: i, value: this.fieldGetters.map(getter => getter(item))};
     });
     mapped.sort(
@@ -166,15 +161,15 @@ class ConcatenatedIterable<T> extends Iterable<T> {
   }
 }
 
+/*
 class OrderedMergeIterable<T> extends Iterable<T> {
   sources: Array<Iterable<T>>;
-  fieldGetters: Array<T=>any|[T=>any|boolean]>;
+  fieldGetters: Array<T=>any | [T=>any, boolean]>;
   directions: Map<number, bool>;
 
   constructor(
     sources: Array<Iterable<T>>,
-    fieldGetters: Array<(T=>any)|[T=>any,boolean]>,
-    directions: ?Array<bool>,
+    fieldGetters: Array<(T=>any) | [T=>any, boolean]>,
   ) {
     super();
     this.sources = sources;
@@ -191,6 +186,7 @@ class OrderedMergeIterable<T> extends Iterable<T> {
     }
   }
 }
+*/
 
 class StaticIterable<T> extends Iterable<T> {
   chunks: Array<Array<T>>;
@@ -207,4 +203,10 @@ class StaticIterable<T> extends Iterable<T> {
   }
 }
 
-export default Iterable;
+const chunq = {
+  from: function(...chunks: Array<Array<T>>): Iterable<T> {
+    return new StaticIterable(...chunks);
+  },
+};
+
+export default chunq;

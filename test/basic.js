@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import Iterable from '../src/Iterable';
+import chunq from '../src/index';
 
 describe('Basic', () => {
   it('should work', async () => {
     const actual = await
-      Iterable.from(
+      chunq.from(
           [
             {
               firstName: 'Rushi',
@@ -30,7 +30,7 @@ describe('Basic', () => {
             }
           ]
         )
-        .concat(Iterable.from([
+        .concat(chunq.from([
             {
               firstName: 'Parag',
               lastName: 'Desai',
